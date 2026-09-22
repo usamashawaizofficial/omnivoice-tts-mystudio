@@ -1,0 +1,66 @@
+name: Build Windows installer
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build-windows:
+    runs-on: windows-2022
+    steps:
+      - name: Check out app source
+        uses: actions/checkout@v4
+
+      - name: Check out omnivoice.cpp engine
+        uses: actions/checkout@v4
+        with:
+          repository: ServeurpersoCom/omnivoice.cpp
+          ref: ed60358
+          path: engine-src
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install PySide6 mutagen pyinstaller
+
+      - name: Build engine (MSVC)
+        shell: cmd
+        run: |
+          cd engine-src
+          call buildall.cmd
+          mkdir ..\packaging\engine-bin-win
+          copy build\bin\omnivoice-tts.exe ..\packaging\engine-bin-win\
+          copy build\bin\omnivoice-codec.exe ..\packaging\engine-bin-win\
+          copy build\bin\*.dll ..\packaging\engine-bin-win\
+
+      - name: Bundle app with PyInstaller
+        run: pyinstaller packaging/tts-studio.spec
+
+      - name: Zip portable folder
+        shell: pwsh
+        run: |
+          Compress-Archive -Path dist/OmniVoiceTTSStudio `
+            -DestinationPath OmniVoiceTTSStudio-win64.zip
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: OmniVoiceTTSStudio-win64
+          path: OmniVoiceTTSStudio-win64.zip
+
+      - name: Attach to GitHub Release (tags only)
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: OmniVoiceTTSStudio-win64.zip
+          body: |
+            Portable Windows build — unzip and run OmniVoiceTTSStudio.exe.
+            On first launch the app downloads ~900 MB of model files, then
+            works fully offline. See docs/REQUIREMENTS.md for system requirements.
