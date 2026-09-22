@@ -43,9 +43,9 @@ jobs:
           cd ..
 
           mkdir ..\packaging\engine-bin-win
-          copy build\bin\Release\omnivoice-tts.exe ..\packaging\engine-bin-win\
-          copy build\bin\Release\omnivoice-codec.exe ..\packaging\engine-bin-win\
-          if exist build\bin\Release\*.dll copy build\bin\Release\*.dll ..\packaging\engine-bin-win\
+          copy build\Release\omnivoice-tts.exe ..\packaging\engine-bin-win\
+          copy build\Release\omnivoice-codec.exe ..\packaging\engine-bin-win\
+          if exist build\Release\*.dll copy build\Release\*.dll ..\packaging\engine-bin-win\
 
       - name: Bundle app with PyInstaller
         run: pyinstaller packaging/tts-studio.spec
