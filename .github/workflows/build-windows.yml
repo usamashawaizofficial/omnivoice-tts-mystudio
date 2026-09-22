@@ -20,6 +20,7 @@ jobs:
           ref: ed603581b2a9bf18fc055ca5de5d4a48960db01a
 
           path: engine-src
+          submodules: recursive
 
       - name: Set up Python 3.11
         uses: actions/setup-python@v5
@@ -37,9 +38,9 @@ jobs:
           cd engine-src
           call buildall.cmd
           mkdir ..\packaging\engine-bin-win
-          copy build\bin\omnivoice-tts.exe ..\packaging\engine-bin-win\
-          copy build\bin\omnivoice-codec.exe ..\packaging\engine-bin-win\
-          copy build\bin\*.dll ..\packaging\engine-bin-win\
+          copy build\bin\Release\omnivoice-tts.exe ..\packaging\engine-bin-win\
+          copy build\bin\Release\omnivoice-codec.exe ..\packaging\engine-bin-win\
+          copy build\bin\Release\*.dll ..\packaging\engine-bin-win\
 
       - name: Bundle app with PyInstaller
         run: pyinstaller packaging/tts-studio.spec
