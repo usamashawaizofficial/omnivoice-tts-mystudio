@@ -36,11 +36,16 @@ jobs:
         shell: cmd
         run: |
           cd engine-src
-          call buildall.cmd
+          mkdir build
+          cd build
+          cmake .. -DGGML_CPU_ALL_VARIANTS=ON -DGGML_BACKEND_DL=ON
+          cmake --build . --config Release -j %NUMBER_OF_PROCESSORS%
+          cd ..
+
           mkdir ..\packaging\engine-bin-win
           copy build\bin\Release\omnivoice-tts.exe ..\packaging\engine-bin-win\
           copy build\bin\Release\omnivoice-codec.exe ..\packaging\engine-bin-win\
-          copy build\bin\Release\*.dll ..\packaging\engine-bin-win\
+          if exist build\bin\Release\*.dll copy build\bin\Release\*.dll ..\packaging\engine-bin-win\
 
       - name: Bundle app with PyInstaller
         run: pyinstaller packaging/tts-studio.spec
