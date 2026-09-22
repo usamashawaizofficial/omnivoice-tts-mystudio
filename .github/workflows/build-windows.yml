@@ -17,7 +17,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: ServeurpersoCom/omnivoice.cpp
-          ref: ed60358
+          ref: ed603581b2a9bf18fc055ca5de5d4a48960db01a
+
           path: engine-src
 
       - name: Set up Python 3.11
