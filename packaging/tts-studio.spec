@@ -16,7 +16,7 @@ SRC = ROOT.parent / "src"             # src/  (tts_studio package lives here)
 ENGINE_BIN = ROOT / "engine-bin-win"  # omnivoice-tts.exe, omnivoice-codec.exe, *.dll
 
 a = Analysis(
-    [str(SRC / "tts_studio" / "ui" / "app.py")],
+    [str(ROOT / "app_launcher.py")],
     pathex=[str(SRC)],
     binaries=[
         (str(ENGINE_BIN / "omnivoice-tts.exe"), "bin"),
