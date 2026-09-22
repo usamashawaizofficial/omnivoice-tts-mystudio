@@ -11,7 +11,7 @@ there before calling PyInstaller.
 """
 from pathlib import Path
 
-ROOT = Path(SPECPATH).parent          # packaging/
+ROOT = Path(SPECPATH)                 # packaging/
 SRC = ROOT.parent / "src"             # src/  (tts_studio package lives here)
 ENGINE_BIN = ROOT / "engine-bin-win"  # omnivoice-tts.exe, omnivoice-codec.exe, *.dll
 
